@@ -10,10 +10,23 @@ const NewBook = (props) => {
   const [genres, setGenres] = useState([]);
 
   const [createBook] = useMutation(CREATE_BOOK, {
-    refetchQueries: [{ query: ALL_BOOKS }],
+    // refetchQueries: [{ query: ALL_BOOKS }],
     onError: (error) => {
+      console.log("$error:-", error);
+      //joni's error position..worked in way to knowing that schema has to be identical in both backend and front end query schema. Shit!(some bad taste!!:P)
       props.setError(error.graphQLErrors[0].message);
     },
+    update: (store, response) => {
+      const dataInStore = store.readQuery({ query: ALL_BOOKS })
+      store.writeQuery({
+        query: ALL_BOOKS,
+        data: {
+          ...dataInStore,
+          allBooks: [...dataInStore.allBooks, response.data.addBook]
+        }
+      })
+    }
+
   });
 
   if (!props.show) {
@@ -23,7 +36,7 @@ const NewBook = (props) => {
   const submit = async (event) => {
     event.preventDefault();
 
-    createBook({ variables: { title, published, author, genres } });
+    createBook({ variables: { title, published: Number(published), author, genres } });
     // console.log("add book...");
 
     setTitle("");

@@ -4,6 +4,7 @@ import Books from "./components/Books";
 import NewBook from "./components/NewBook";
 import { ALL_AUTHORS, ALL_BOOKS } from "./queries";
 import { useQuery } from "@apollo/client";
+import ChangeBirth from "./components/ChangeBirth";
 
 const Notify = ({ errorMessage }) => {
   if (!errorMessage) {
@@ -18,10 +19,10 @@ const App = () => {
   const [page, setPage] = useState("authors");
 
   const result = useQuery(ALL_AUTHORS, {
-    pollInterval: 2000, // querying server every two seconds..
+    pollInterval: 20000, // querying server every two seconds..
   });
   const result2 = useQuery(ALL_BOOKS, {
-    pollInterval: 2000, // querying server every two seconds..
+    pollInterval: 20000, // querying server every two seconds..
   });
 
   if (result.loading || result2.loading) {
@@ -56,6 +57,7 @@ const App = () => {
       <Books books={result2.data.allBooks} show={page === "books"} />
 
       <NewBook setError={notify} show={page === "add"} />
+      <ChangeBirth authors={result.data.allAuthors}></ChangeBirth>
     </div>
   );
 };

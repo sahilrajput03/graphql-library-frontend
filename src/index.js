@@ -7,7 +7,7 @@ import { ApolloClient, ApolloProvider, HttpLink, InMemoryCache, gql } from "@apo
 const client = new ApolloClient({
   cache: new InMemoryCache(),
   link: new HttpLink({
-    uri: "http://localhost:4001",
+    uri: "http://localhost:4000",
   }),
 });
 
